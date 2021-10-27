@@ -44,6 +44,8 @@ async function run() {
 
     })
 
+
+
     //delete single data
     app.delete("/services/:id",async(req,res)=>{
         const id = req.params.id;
@@ -51,6 +53,11 @@ async function run() {
         const result = await servicesCollection.deleteOne(query);
         res.json(result);
     })
+
+        // check 
+        app.get("/hello",async(req, res)=>{
+            res.send("hello check update here")
+        })
       
     } finally {
     //   await client.close();

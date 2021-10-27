@@ -17,58 +17,59 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-      await client.connect();
-      const database = client.db("Genius-Car-Mechanic");
-      const servicesCollection = database.collection("services");
-      // create a document to insert post method
-        app.post("/services",async(req,res)=>{
+        await client.connect();
+        const database = client.db("Genius-Car-Mechanic");
+        const servicesCollection = database.collection("services");
+        // create a document to insert post method
+        app.post("/services", async (req, res) => {
             const newService = req.body;
             const result = await servicesCollection.insertOne(newService);
-            console.log("hitting the post method",req.body);
+            console.log("hitting the post method", req.body);
             res.json(result);
         })
 
-    // load data from database by find 
-    app.get("/services",async(req,res)=>{
-        const cursor = servicesCollection.find({})
-        const services = await cursor.toArray()
-        res.send(services);
-    })
-
-    // load single data 
-    app.get("/services/:id",async(req,res)=>{
-        const id = req.params.id;
-        const query = {_id:ObjectId(id)}
-        const service = await servicesCollection.findOne(query)
-        res.json(service)
-
-    })
-
-
-
-    //delete single data
-    app.delete("/services/:id",async(req,res)=>{
-        const id = req.params.id;
-        const query = {_id:ObjectId(id)}
-        const result = await servicesCollection.deleteOne(query);
-        res.json(result);
-    })
-
-        // check 
-        app.get("/hello",async(req, res)=>{
-            res.send("hello check update here")
+        // load data from database by find 
+        app.get("/services", async (req, res) => {
+            const cursor = servicesCollection.find({})
+            const services = await cursor.toArray()
+            res.send(services);
         })
-      
-    } finally {
-    //   await client.close();
-    }
-  }
-  run().catch(console.dir);
 
-app.get("/",(req,res)=>{
+        // load single data 
+        app.get("/services/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const service = await servicesCollection.findOne(query)
+            res.json(service)
+
+        })
+
+
+
+        //delete single data
+        app.delete("/services/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await servicesCollection.deleteOne(query);
+            res.json(result);
+        })
+
+    } finally {
+        //   await client.close();
+    }
+}
+run().catch(console.dir);
+
+app.get("/", (req, res) => {
     res.send("Hello node..How are you?")
 })
 
-app.listen(port,()=>{
-    console.log("listening localhost port",port);
+
+// check 
+app.get("/hello", async (req, res) => {
+    res.send("hello check update here")
+})
+
+app.listen(port, () => {
+    console.log("listening localhost port", port);
 })
